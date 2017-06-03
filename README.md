@@ -1,26 +1,32 @@
-# GenStrings
-ios Localizable.strings generator
+## This is ios Localizable.strings generator
 
 # Usages
 ## add string extension
-
+```
 extension String {
     var localized: String {
         let string = NSLocalizedString(self, tableName: nil, bundle: Bundle.main, value: "", comment: "")
         return string
     }
 }
-## and use localized variable for localization **
-######## Example:
-textfield.text = "Enter Text".localized
+```
+## and use localized variable for localization
+###### Example:
 
-for Storyboard: use 
+```
+textfield.text = "Enter Text".localized
+```
+
+for Storyboard: use library
+```
 pod 'IBLocalizable'
+
+```
 and set localizedString in xib,storyboard
 
 
 ## Add run script in project:
-
+```
 set -x
 #Get base path to project
 BASE_PATH="$PROJECT_DIR/$PROJECT_NAME"
@@ -43,3 +49,5 @@ chmod 755 "$GENSTRINGS_PATH"
 
 #Actually generate output. 
 "$GENSTRINGS_PATH" "$INPUT_PATH" "$OUTPUT_PATH"
+
+```
