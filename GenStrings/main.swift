@@ -34,34 +34,6 @@ extension String {
         return results
     }
 }
-func matches(for regex: String, in text: String) -> [String] {
-    
-    do {
-        let regex = try NSRegularExpression(pattern: regex)
-        let nsString = text as NSString
-        let results = regex.matches(in: text, range: NSRange(location: 0, length: nsString.length))
-        return results.map { nsString.substring(with: $0.range)}
-    } catch let error {
-        print("invalid regex: \(error.localizedDescription)")
-        return []
-    }
-}
-
-private extension FileManager {
-    
-    func isDirectoryAtPath(path : String) -> Bool {
-        let manager = FileManager.default
-        do {
-            let attribs: [FileAttributeKey : Any]? = try manager.attributesOfItem(atPath: path)
-            if let attributes = attribs {
-                let type = attributes[FileAttributeKey.type] as? String
-                return type == FileAttributeType.typeDirectory.rawValue
-            }
-        } catch _ {
-            return false
-        }
-    }
-}
 
 extension URL {
     var isDirectory: Bool {
@@ -121,12 +93,10 @@ func filterxibStoryboardFiles(string:URL)->[URL]{
 
 func getAllSwiftStrings(rootUrl:URL)->Set<String>{
     let all = filterSwiftFiles(string: rootUrl)
-    //    var allLocal = [String]()
     var keys = Set<String>()
     for item in all {
         let string = try! String(contentsOf: item)
         let matched = string.capturedGroups(withRegex:"\"(.*?)\".localized")
-        //        keys.addObjects(from: matched)
         keys = keys.union(matched)
     }
     return keys
@@ -139,14 +109,8 @@ func getAllStringsForXibs(rootUrl:URL)->Set<String>{
     for item in all {
         let string = try! String(contentsOf: item)
         let matched = string.capturedGroups(withRegex: "keyPath=\"localizableString\" value=\"(.*?)\"")
-        //        allLocal.append(contentsOf: matched)
         keys = keys.union(matched)
     }
-    //    var keys = [String:String]()
-    //    for strs in allLocal {
-    //        let key = strs.replacingOccurrences(of: ".localized", with: "")
-    //        keys[key] = key
-    //    }
     return keys
 }
 
@@ -158,7 +122,7 @@ func run(){
     let output = arguments[2]
     
     if(FileManager.default.fileExists(atPath: output)){
-        //  try! FileManager.default.removeItem(atPath: output);
+        try! FileManager.default.removeItem(atPath: output);
     }
     let rootUrl = URL(fileURLWithPath: input)
     let stringsSwift = getAllSwiftStrings(rootUrl: rootUrl)
