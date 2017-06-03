@@ -1,7 +1,8 @@
 # GenStrings
 ios Localizable.strings generator
 
-- add string extension
+# Usages
+## add string extension
 
 extension String {
     var localized: String {
@@ -9,8 +10,8 @@ extension String {
         return string
     }
 }
-# and use localized variable for localization
-# Example:
+## and use localized variable for localization **
+######## Example:
 textfield.text = "Enter Text".localized
 
 for Storyboard: use 
@@ -18,7 +19,7 @@ pod 'IBLocalizable'
 and set localizedString in xib,storyboard
 
 
-# Add run script in project:
+## Add run script in project:
 
 set -x
 #Get base path to project
