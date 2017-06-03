@@ -34,7 +34,7 @@ BASE_PATH="$PROJECT_DIR/$PROJECT_NAME"
 #--------- START OF YOUR CONFIGURATION (change Path_To_.. to fit)
 
 #Get path to GenStrings.swift
-GENSTRINGS_PATH="Path_To_../GenStrings.swift"
+GENSTRINGS_PATH="Path_To_../GenStrings/main.swift"
 
 #Get path to main localization file (usually english).
 OUTPUT_PATH="$BASE_PATH/Base.lproj/Localizable.strings"
