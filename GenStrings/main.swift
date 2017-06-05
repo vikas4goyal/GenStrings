@@ -104,7 +104,6 @@ func getAllSwiftStrings(rootUrl:URL)->Set<String>{
 
 func getAllStringsForXibs(rootUrl:URL)->Set<String>{
     let all = filterxibStoryboardFiles(string: rootUrl)
-    //    var allLocal = [String]()
     var keys = Set<String>()
     for item in all {
         let string = try! String(contentsOf: item)
@@ -115,9 +114,7 @@ func getAllStringsForXibs(rootUrl:URL)->Set<String>{
 }
 
 func run(){
-    //    let arguments = CommandLine.arguments
-    let arguments = ["/Users/apple1/Desktop/bugs/New/Password Keeper/Password Keeper/GenStrings.swift","/Users/apple1/Desktop/bugs/New/Password Keeper/Password Keeper/","/Users/apple1/Desktop/bugs/New/Password Keeper/Password Keeper/Localization/Base.lproj/Localizable.strings"]
-    
+    let arguments = CommandLine.arguments    
     let input = arguments[1]
     let output = arguments[2]
     
