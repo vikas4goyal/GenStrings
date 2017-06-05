@@ -62,9 +62,6 @@ func filterSwiftFiles(string:URL)->[URL]{
         return urls
     }
     let name = string.lastPathComponent;
-    if(name == "GenStrings.swift"){
-        return urls
-    }
     if(name.contains(".swift")){
         urls.append(string)
     }
@@ -82,9 +79,6 @@ func filterxibStoryboardFiles(string:URL)->[URL]{
         return urls
     }
     let name = string.lastPathComponent;
-    if(name == "GenStrings.swift"){
-        return urls
-    }
     if(name.contains(".storyboard") || name.contains(".xib")){
         urls.append(string)
     }
@@ -114,7 +108,7 @@ func getAllStringsForXibs(rootUrl:URL)->Set<String>{
 }
 
 func run(){
-    let arguments = CommandLine.arguments    
+    let arguments = CommandLine.arguments
     let input = arguments[1]
     let output = arguments[2]
     
