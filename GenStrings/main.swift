@@ -118,7 +118,7 @@ func run(){
     let rootUrl = URL(fileURLWithPath: input)
     let stringsSwift = getAllSwiftStrings(rootUrl: rootUrl)
     let stringsXib = getAllStringsForXibs(rootUrl: rootUrl)
-    let finalStrings = stringsSwift.union(stringsXib)
+    let finalStrings = stringsSwift.union(stringsXib).sorted()
     print(finalStrings);
     
     FileManager.default.createFile(atPath: output, contents: nil, attributes: nil);
