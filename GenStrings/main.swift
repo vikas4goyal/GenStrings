@@ -20,13 +20,13 @@ extension String {
             return results
         }
         
-        let matches = regex.matches(in: self, options: [], range: NSRange(location:0, length: self.characters.count))
+        let matches = regex.matches(in: self, options: [], range: NSRange(location:0, length: self.count))
         
         for match in matches{
             let lastRangeIndex = match.numberOfRanges - 1
             guard lastRangeIndex >= 1 else { return results }
             for i in 1...lastRangeIndex {
-                let capturedGroupIndex = match.rangeAt(i)
+                let capturedGroupIndex = match.range(at: i)
                 let matchedString = (self as NSString).substring(with: capturedGroupIndex)
                 results.append(matchedString)
             }
@@ -110,25 +110,39 @@ func getAllStringsForXibs(rootUrl:URL)->Set<String>{
 func run(){
     let arguments = CommandLine.arguments
     let input = arguments[1]
-    let output = arguments[2]
     
-    if(FileManager.default.fileExists(atPath: output)){
-        try! FileManager.default.removeItem(atPath: output);
-    }
     let rootUrl = URL(fileURLWithPath: input)
     let stringsSwift = getAllSwiftStrings(rootUrl: rootUrl)
     let stringsXib = getAllStringsForXibs(rootUrl: rootUrl)
     let finalStrings = stringsSwift.union(stringsXib).sorted()
     print(finalStrings);
     
-    FileManager.default.createFile(atPath: output, contents: nil, attributes: nil);
-    guard let fileHandler = FileHandle(forWritingAtPath: output) else{
-        print("filehandler is nil")
-        return
+    let outputRootFolder = arguments[2]
+    let outputPaths = arguments[3]
+    let paths = outputPaths.split(separator: ",")
+    
+    for outputPath in paths {
+        let filePath = "\(outputRootFolder)/\(outputPath)/Localizable.strings"
+        if(!FileManager.default.fileExists(atPath: filePath)){
+            FileManager.default.createFile(atPath: filePath, contents: nil, attributes: nil);
+        }
+        guard let fileHandler = FileHandle(forUpdatingAtPath: filePath) else{
+            print("filehandler is nil")
+            break
+        }
+        do {
+            let data = fileHandler.readDataToEndOfFile()
+            let oldValues = try PropertyListSerialization.propertyList(from: data, options: PropertyListSerialization.ReadOptions.mutableContainers
+                , format: nil) as? [String:String]
+            for value in finalStrings{
+                if oldValues?[value] == nil {
+                    fileHandler.write("\"\(value)\" = \"\(value)\";\n".data(using: String.Encoding.utf8)!)
+                }
+            }
+        } catch {
+            print("Error \(error)")
+        }
+        fileHandler.closeFile()
     }
-    for value in finalStrings{
-        fileHandler.write("\"\(value)\" = \"\(value)\";\n".data(using: String.Encoding.utf8)!)
-    }
-    fileHandler.closeFile()
 }
 run()
